@@ -13,7 +13,9 @@ public class Mdi extends javax.swing.JFrame {
     public static String supervisorLinea;
     public static ArrayList<OrdenProduccion> arrayOrdenes = new ArrayList<>();
     public static Usuarios usuarios = new Usuarios();
-    public static SupervisorLinea usuario = new SupervisorLinea();
+    public static SupervisorLinea userSuperLinea = new SupervisorLinea();
+    public static SupervisorCalidad userSuperCalidad = new SupervisorCalidad();
+    public static Administrativo userAdministrativo = new Administrativo();
     public static Lineas lineas = new Lineas();
     public static Modelos modelos = new Modelos();
     public static ArrayList<Modelo> arrayModelos = new ArrayList<>();
@@ -31,13 +33,13 @@ public class Mdi extends javax.swing.JFrame {
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
         cargarDatos();
-        usuario.mostrarVentanaLogin();
+        userSuperLinea.mostrarVentanaLogin();
     }
 
     /**
      * Cargamos los datos que vamos a utilizar
      */
-    private void cargarDatos(){
+    private void cargarDatos() {
         // Cargamos los datos que vamos a necesitar
         arrayModelos = modelos.cargarModelosPredeterminados();
         arrayColores = colores.cargarColoresPredeterminados();
@@ -46,7 +48,6 @@ public class Mdi extends javax.swing.JFrame {
         arrayLineas = lineas.cargarLineas();
     }
 
-    
     // VENTANA
     /**
      * Agregar el JInternalFrame al DesktopJPane "escritorio"
@@ -56,8 +57,7 @@ public class Mdi extends javax.swing.JFrame {
     public static void addVentana(JInternalFrame ventana) {
         escritorio.add(ventana);
     }
-    
-    
+
     // USUARIOS
     /**
      * Recibe el usuario logueado y lo guarda en la variable
@@ -65,19 +65,41 @@ public class Mdi extends javax.swing.JFrame {
      * @param usuarioLogueado
      */
     public static void cargarSupervisorLinea(SupervisorLinea usuarioLogueado) {
-        usuario = usuarioLogueado;
+        userSuperLinea = usuarioLogueado;
+    }
+
+    public static SupervisorLinea getSupervisorLinea() {
+        return userSuperLinea;
+    }
+
+    public static void cargarSupervisorCalidad(SupervisorCalidad usuarioLogueado) {
+        userSuperCalidad = usuarioLogueado;
+    }
+
+    public static SupervisorCalidad getSupervisorCalidad() {
+        return userSuperCalidad;
+    }
+
+    public static void cargarAdministrativo(Administrativo usuarioLogueado) {
+        userAdministrativo = usuarioLogueado;
+    }
+
+    public static Administrativo getAdministrativo() {
+        return userAdministrativo;
     }
 
     public static void borrarUsuario() {
-        usuario = null;
+        userSuperLinea = null;
+        userSuperCalidad = null;
+        userAdministrativo = null;
     }
 
     public static ArrayList<Usuario> getArrayUsuarios() {
         return arrayUsuarios;
     }
-
-    public static SupervisorLinea getSupervisorLinea() {
-        return usuario;
+    
+    public static void actualizarArrayUsuarios(ArrayList<Usuario> array){
+        arrayUsuarios = array;
     }
 
     // LÍNEAS
@@ -117,9 +139,10 @@ public class Mdi extends javax.swing.JFrame {
         return arrayHoras;
     }
 
-    public static void actualizarHoras(ArrayList<Hora> nuevoArrayHoras){
+    public static void actualizarHoras(ArrayList<Hora> nuevoArrayHoras) {
         arrayHoras = nuevoArrayHoras;
     }
+
     public static void addHora(Hora hora) {
         arrayHoras.add(hora);
     }
@@ -133,16 +156,6 @@ public class Mdi extends javax.swing.JFrame {
         arrayColores.add(color);
     }
 
-    // MENÚ
-    public static void HabilitarMenuCompleto() {
-        menuModelos.setEnabled(true);
-
-    }
-
-    public static void DeshabilitarMenuCompleto() {
-        menuModelos.setEnabled(false);
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -154,28 +167,12 @@ public class Mdi extends javax.swing.JFrame {
 
         escritorio = new javax.swing.JDesktopPane();
         menuBar = new javax.swing.JMenuBar();
-        menuModelos = new javax.swing.JMenu();
-        menuGestionarModelo = new javax.swing.JCheckBoxMenuItem();
         jMenu1 = new javax.swing.JMenu();
         menuSalir = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         escritorio.setBackground(new java.awt.Color(153, 153, 153));
-
-        menuModelos.setText("Modelos");
-        menuModelos.setEnabled(false);
-
-        menuGestionarModelo.setSelected(true);
-        menuGestionarModelo.setText("Gestionar Modelos");
-        menuGestionarModelo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuGestionarModeloActionPerformed(evt);
-            }
-        });
-        menuModelos.add(menuGestionarModelo);
-
-        menuBar.add(menuModelos);
 
         jMenu1.setText("Sistema");
 
@@ -210,18 +207,11 @@ public class Mdi extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_menuSalirActionPerformed
 
-    private void menuGestionarModeloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuGestionarModeloActionPerformed
-        VentanaGestionarModelo v = new VentanaGestionarModelo();
-        v.toFront();
-    }//GEN-LAST:event_menuGestionarModeloActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private static javax.swing.JDesktopPane escritorio;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar menuBar;
-    private javax.swing.JCheckBoxMenuItem menuGestionarModelo;
-    public static javax.swing.JMenu menuModelos;
     private javax.swing.JMenuItem menuSalir;
     // End of variables declaration//GEN-END:variables
 

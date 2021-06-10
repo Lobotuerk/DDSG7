@@ -1,7 +1,9 @@
 package ventanas;
 
+import com.leguizamon.dissist.Administrativo;
 import com.leguizamon.dissist.Mdi;
 import com.leguizamon.dissist.MisFunciones;
+import com.leguizamon.dissist.SupervisorCalidad;
 import com.leguizamon.dissist.SupervisorLinea;
 import com.leguizamon.dissist.Usuario;
 import com.leguizamon.dissist.Usuarios;
@@ -129,17 +131,32 @@ public class VentanaLogin extends javax.swing.JInternalFrame {
         } else if (password.length() == 0) {
             JOptionPane.showMessageDialog(null, "Debe ingresar el Password.");
         } else {
-            if (u.esSupervisorLinea(dni, password, arrayUsuarios)) {
+            if (u.esUsuario(dni, password, arrayUsuarios)) {
                 JOptionPane.showMessageDialog(null, "Acceso Concedido.");
                 this.dispose();
-                u.cargarSupervisorLinea(dni, password, arrayUsuarios);
-                SupervisorLinea sl = new SupervisorLinea();
-                sl.gestionarOP();
-                Mdi.HabilitarMenuCompleto();
+                u.cargarUsuario(dni, password, arrayUsuarios);
+
+                String tipo = u.obtenerTipoUsuario(dni, password, arrayUsuarios);
+                switch (tipo) {
+                    case "supervisorLinea":
+                        SupervisorLinea sl = Mdi.getSupervisorLinea();
+                        sl.gestionarOP();
+                        break;
+                    case "supervisorCalidad":
+                        SupervisorCalidad sc = Mdi.getSupervisorCalidad();
+
+                        break;
+                    case "administrativo":
+                        Administrativo ad = Mdi.getAdministrativo();
+                        ad.administrar();
+                        break;
+                }
             } else {
                 JOptionPane.showMessageDialog(null, "Las credenciales no son correctas.");
             }
         }
+
+
     }//GEN-LAST:event_btnIngresarActionPerformed
 
     public String getDni() {

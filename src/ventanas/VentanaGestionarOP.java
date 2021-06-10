@@ -448,7 +448,6 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
         dispose();
         Usuario u = new Usuario();
         u.mostrarVentanaLogin();
-        Mdi.DeshabilitarMenuCompleto();
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
     private void btnNuevoObjetivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoObjetivoActionPerformed

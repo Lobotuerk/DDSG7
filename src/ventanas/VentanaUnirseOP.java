@@ -6,6 +6,7 @@ import com.leguizamon.dissist.OrdenProduccion;
 import com.leguizamon.dissist.Ordenes;
 import com.leguizamon.dissist.Turno;
 import com.leguizamon.dissist.Turnos;
+import com.leguizamon.dissist.Usuario;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -42,6 +43,7 @@ public class VentanaUnirseOP extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         btnUnirse = new javax.swing.JButton();
         jComboOperaciones = new javax.swing.JComboBox<>();
+        jButtonCerrarSesion = new javax.swing.JButton();
 
         setTitle("SELECCIONAR ORDEN DE PRODUCCION");
 
@@ -58,6 +60,14 @@ public class VentanaUnirseOP extends javax.swing.JInternalFrame {
 
         jComboOperaciones.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        jButtonCerrarSesion.setBackground(new java.awt.Color(255, 51, 51));
+        jButtonCerrarSesion.setText("CERRAR SESION");
+        jButtonCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCerrarSesionActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -71,14 +81,19 @@ public class VentanaUnirseOP extends javax.swing.JInternalFrame {
                         .addGap(104, 104, 104)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboOperaciones, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(73, Short.MAX_VALUE))
+                            .addComponent(jComboOperaciones, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonCerrarSesion)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButtonCerrarSesion))
                 .addGap(18, 18, 18)
                 .addComponent(jComboOperaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(88, 88, 88)
@@ -95,9 +110,17 @@ public class VentanaUnirseOP extends javax.swing.JInternalFrame {
         VentanaCalidad v = new VentanaCalidad(OP);
     }//GEN-LAST:event_btnUnirseActionPerformed
 
+    private void jButtonCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCerrarSesionActionPerformed
+        Mdi.borrarUsuario();
+        dispose();
+        Usuario u = new Usuario();
+        u.mostrarVentanaLogin();
+    }//GEN-LAST:event_jButtonCerrarSesionActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnUnirse;
+    private javax.swing.JButton jButtonCerrarSesion;
     private javax.swing.JComboBox<String> jComboOperaciones;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables

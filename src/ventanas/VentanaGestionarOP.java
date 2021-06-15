@@ -23,6 +23,7 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
 
     private DefaultTableModel model = new DefaultTableModel();
     private DefaultTableModel modelObjetivos = new DefaultTableModel();
+    private DefaultTableModel modelDefectos = new DefaultTableModel();
     private final ArrayList<OrdenProduccion> arrayOrdenes;
     private ArrayList<Hora> arrayHoras;
     private int numeroOrden;
@@ -59,7 +60,7 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
 
                 gestionarBotones(model.getValueAt(fila, 7).toString());
 
-                // Cargamos los objetivos de la orden de producción
+                // Cargamos los objetivos de la orden de producción seleccionada
                 setModeloObjetivos();
                 Modelos m = new Modelos();
                 String descripcionModelo = m.getModeloBySku(ordenProduccion.getModelo());
@@ -68,6 +69,9 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
                 String descripcionColor = c.getColorByCodigo(ordenProduccion.getModelo(), ordenProduccion.getColor());
 
                 lblModelo.setText("Modelo: " + descripcionModelo + " - Color: " + descripcionColor);
+                
+                // cargamos los defectos que correspondan a la OP seleccionada
+                setModeloDefectos();
 
             } else {
                 btnPausar.setEnabled(false);
@@ -158,6 +162,11 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
         lblCantidadObjetivos.setText(String.valueOf(totalObjetivos));
     }
 
+    private void setModeloDefectos(){
+        String[] cabecera ={"Tipo de defecto", "Cantidad"};
+        modelDefectos.setColumnIdentifiers(cabecera);
+        tablaDefectos.setModel(modelDefectos);
+    }
     /**
      * Permite seleccionar una fila de la tabla de Órdenes
      *
@@ -228,6 +237,12 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
         btnEditarObjetivo = new javax.swing.JButton();
         btnQuitarObjetivo = new javax.swing.JButton();
         lblModelo = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        txtCorrectos = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        txtDefectuosos = new javax.swing.JTextField();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tablaDefectos = new javax.swing.JTable();
 
         setTitle("GESTIONAR ORDEN DE PRODUCCIÓN");
         setFrameIcon(null);
@@ -273,7 +288,6 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
             }
         });
 
-        tblOrdenes.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(tblOrdenes);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -332,51 +346,88 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
         });
 
         lblModelo.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblModelo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel2.setText("Pares Correctos:");
+
+        txtCorrectos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        txtCorrectos.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        txtCorrectos.setText("0");
+        txtCorrectos.setBorder(null);
+
+        jLabel3.setText("Pares defectuosos:");
+
+        txtDefectuosos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        txtDefectuosos.setText("0");
+        txtDefectuosos.setBorder(null);
+
+        tablaDefectos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane3.setViewportView(tablaDefectos);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jScrollPane2)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblHoras)
-                                    .addComponent(lblObjetivos))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblCantidadObjetivos)
-                                    .addComponent(lblCantidadHoras)))
-                            .addGroup(layout.createSequentialGroup()
+                .addGap(76, 76, 76)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnPausar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnReanudar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnCerrarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(lblHoras, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblObjetivos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(lblCantidadHoras)
+                                .addComponent(lblCantidadObjetivos)))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(txtCorrectos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 754, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnNuevoObjetivo)
                                 .addGap(18, 18, 18)
                                 .addComponent(btnEditarObjetivo)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnQuitarObjetivo))
+                                .addComponent(btnQuitarObjetivo)
+                                .addGap(18, 18, 18)
+                                .addComponent(lblModelo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 752, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnPausar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnReanudar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnCerrarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(lblModelo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtDefectuosos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(2, 2, 2)))
+                .addContainerGap(62, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnNuevo)
@@ -386,25 +437,37 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
                     .addComponent(btnCerrarSesion))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(8, 8, 8)
-                .addComponent(lblModelo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(btnNuevoObjetivo)
-                    .addComponent(btnEditarObjetivo)
-                    .addComponent(btnQuitarObjetivo))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(btnNuevoObjetivo)
+                            .addComponent(btnEditarObjetivo)
+                            .addComponent(btnQuitarObjetivo)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(8, 8, 8)
+                        .addComponent(lblModelo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblHoras)
-                    .addComponent(lblCantidadHoras))
+                    .addComponent(lblCantidadHoras)
+                    .addComponent(jLabel3)
+                    .addComponent(txtDefectuosos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblObjetivos)
-                    .addComponent(lblCantidadObjetivos))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblObjetivos)
+                            .addComponent(lblCantidadObjetivos))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(txtCorrectos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30))
         );
 
         pack();
@@ -485,14 +548,20 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnQuitarObjetivo;
     private javax.swing.JButton btnReanudar;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblCantidadHoras;
     private javax.swing.JLabel lblCantidadObjetivos;
     private javax.swing.JLabel lblHoras;
     private javax.swing.JLabel lblModelo;
     private javax.swing.JLabel lblObjetivos;
+    private javax.swing.JTable tablaDefectos;
     private javax.swing.JTable tblObjetivos;
     private javax.swing.JTable tblOrdenes;
+    private javax.swing.JTextField txtCorrectos;
+    private javax.swing.JTextField txtDefectuosos;
     // End of variables declaration//GEN-END:variables
 }

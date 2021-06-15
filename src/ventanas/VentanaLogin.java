@@ -144,7 +144,7 @@ public class VentanaLogin extends javax.swing.JInternalFrame {
                         break;
                     case "supervisorCalidad":
                         SupervisorCalidad sc = Mdi.getSupervisorCalidad();
-
+                        sc.unirseOP();
                         break;
                     case "administrativo":
                         Administrativo ad = Mdi.getAdministrativo();

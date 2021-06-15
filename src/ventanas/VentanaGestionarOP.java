@@ -174,7 +174,7 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
 
     private void gestionarBotones(String estado) {
         switch (estado) {
-            case "INICIADO" -> {
+            case "INICIADO" : {
                 btnPausar.setEnabled(true);
                 btnReanudar.setEnabled(false);
                 btnFinalizar.setEnabled(true);
@@ -182,7 +182,7 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
                 btnEditarObjetivo.setEnabled(false);
                 btnQuitarObjetivo.setEnabled(false);
             }
-            case "PAUSADO" -> {
+            case "PAUSADO" : {
                 btnPausar.setEnabled(false);
                 btnReanudar.setEnabled(true);
                 btnFinalizar.setEnabled(false);
@@ -190,7 +190,7 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
                 btnEditarObjetivo.setEnabled(false);
                 btnQuitarObjetivo.setEnabled(false);
             }
-            case "FINALIZADO" -> {
+            case "FINALIZADO" : {
                 btnPausar.setEnabled(false);
                 btnReanudar.setEnabled(false);
                 btnFinalizar.setEnabled(false);

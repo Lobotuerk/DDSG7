@@ -6,6 +6,7 @@ import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import javax.swing.JInternalFrame;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 
@@ -82,9 +83,9 @@ public class MisFunciones {
     }
 
     public static Turno getTurnoByHora(int hora) {
-        var turnoM = Arrays.asList(6, 7, 8, 9, 10, 11, 12, 13);
-        var turnoT = Arrays.asList(14, 16, 17, 18, 19, 20, 21);
-        var turnoN = Arrays.asList(22, 23, 0, 1, 2, 3, 4, 5);
+        List<Integer> turnoM = Arrays.asList(6, 7, 8, 9, 10, 11, 12, 13);
+        List<Integer> turnoT = Arrays.asList(14, 16, 17, 18, 19, 20, 21);
+        List<Integer> turnoN = Arrays.asList(22, 23, 0, 1, 2, 3, 4, 5);
         ArrayList<Turno> arrayTurnos = Mdi.getArrayTurnos();
         Turno turnoEncontrado = new Turno();
 

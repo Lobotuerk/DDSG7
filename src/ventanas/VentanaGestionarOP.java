@@ -10,6 +10,9 @@ import com.leguizamon.dissist.OrdenProduccion;
 import com.leguizamon.dissist.Ordenes;
 import com.leguizamon.dissist.Usuario;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.RowSorter;
 import javax.swing.SwingConstants;
@@ -32,6 +35,7 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
     private OrdenProduccion ordenProduccion = new OrdenProduccion();
     private int idHoraSeleccionada;
     DefaultTableCellRenderer centrador;
+    private int ordenActual = -1;
 
     /**
      * Creates new form VentanaGestionarOP
@@ -55,6 +59,7 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
             if (tblOrdenes.getSelectedRowCount() > 0) {
                 int fila = tblOrdenes.getSelectedRow();
                 numeroOrden = Integer.parseInt(model.getValueAt(fila, 0).toString());
+                ordenActual = numeroOrden;
 
                 ordenProduccion = MisFunciones.getOrdenProduccionByNumero(numeroOrden);
 
@@ -72,6 +77,24 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
                 
                 // cargamos los defectos que correspondan a la OP seleccionada
                 setModeloDefectos();
+                int sanos = MisFunciones.getOrdenProduccionByNumero(ordenActual).getTurno().getParesSanos();
+                int defectuosos = 0;
+                String col[] = {"Nombre", "Cantidad"};
+                DefaultTableModel model = new DefaultTableModel(col,0);
+                HashMap<String, Integer> mapa_defecto = MisFunciones.getOrdenProduccionByNumero(numeroOrden).getTurno().getParesDefectuoso();
+                mapa_defecto = MisFunciones.sortByValue(mapa_defecto);
+                Iterator it = mapa_defecto.entrySet().iterator();
+                while (it.hasNext()) {
+                    Map.Entry pair = (Map.Entry)it.next();
+                    defectuosos += (int) pair.getValue();
+                    String defecto = pair.getKey().toString();
+                    Object[] row = {defecto, (int) pair.getValue()};
+                    model.addRow(row);
+//                    it.remove(); // avoids a ConcurrentModificationException
+                }
+                lblCorrectos.setText(Integer.toString(sanos));
+                lblDefectuosos.setText(Integer.toString(defectuosos));
+                tablaDefectos.setModel(model);
 
             } else {
                 btnPausar.setEnabled(false);
@@ -238,14 +261,19 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
         btnQuitarObjetivo = new javax.swing.JButton();
         lblModelo = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        txtCorrectos = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        txtDefectuosos = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
         tablaDefectos = new javax.swing.JTable();
+        lblCorrectos = new javax.swing.JLabel();
+        lblDefectuosos = new javax.swing.JLabel();
 
         setTitle("GESTIONAR ORDEN DE PRODUCCIÓN");
         setFrameIcon(null);
+        addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                formMouseMoved(evt);
+            }
+        });
 
         btnNuevo.setText("NUEVA OP");
         btnNuevo.addActionListener(new java.awt.event.ActionListener() {
@@ -351,16 +379,7 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel2.setText("Pares Correctos:");
 
-        txtCorrectos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        txtCorrectos.setHorizontalAlignment(javax.swing.JTextField.LEFT);
-        txtCorrectos.setText("0");
-        txtCorrectos.setBorder(null);
-
         jLabel3.setText("Pares defectuosos:");
-
-        txtDefectuosos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        txtDefectuosos.setText("0");
-        txtDefectuosos.setBorder(null);
 
         tablaDefectos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -371,6 +390,12 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
             }
         ));
         jScrollPane3.setViewportView(tablaDefectos);
+
+        lblCorrectos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblCorrectos.setText("0");
+
+        lblDefectuosos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblDefectuosos.setText("0");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -401,7 +426,7 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(txtCorrectos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblCorrectos))
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 754, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
@@ -419,8 +444,8 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtDefectuosos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(lblDefectuosos))
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(2, 2, 2)))
                 .addContainerGap(62, Short.MAX_VALUE))
@@ -447,7 +472,7 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
                             .addComponent(btnQuitarObjetivo)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(8, 8, 8)
-                        .addComponent(lblModelo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(lblModelo, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -455,7 +480,7 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
                     .addComponent(lblHoras)
                     .addComponent(lblCantidadHoras)
                     .addComponent(jLabel3)
-                    .addComponent(txtDefectuosos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblDefectuosos))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -465,7 +490,7 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
-                            .addComponent(txtCorrectos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(lblCorrectos)))
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30))
         );
@@ -538,6 +563,22 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
         VentanaEditarObjetivo v = new VentanaEditarObjetivo(ordenProduccion, hora);
     }//GEN-LAST:event_btnEditarObjetivoActionPerformed
 
+    private void formMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseMoved
+        //Actualizacion en vivo si es necesario
+//        if (ordenActual == -1) return;
+//        int sanos = MisFunciones.getOrdenProduccionByNumero(ordenActual).getTurno().getParesSanos();
+//        int defectuosos = 0;
+//        HashMap<String, Integer> mapa_defecto = MisFunciones.getOrdenProduccionByNumero(ordenActual).getTurno().getParesDefectuoso();
+//        Iterator it = mapa_defecto.entrySet().iterator();
+//        while (it.hasNext()) {
+//            Map.Entry pair = (Map.Entry)it.next();
+//            defectuosos += (int) pair.getValue();
+//            it.remove(); // avoids a ConcurrentModificationException
+//        }
+//        lblCorrectos.setText(Integer.toString(sanos));
+//        lblDefectuosos.setText(Integer.toString(defectuosos));
+    }//GEN-LAST:event_formMouseMoved
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCerrarSesion;
     private javax.swing.JButton btnEditarObjetivo;
@@ -555,13 +596,13 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblCantidadHoras;
     private javax.swing.JLabel lblCantidadObjetivos;
+    private javax.swing.JLabel lblCorrectos;
+    private javax.swing.JLabel lblDefectuosos;
     private javax.swing.JLabel lblHoras;
     private javax.swing.JLabel lblModelo;
     private javax.swing.JLabel lblObjetivos;
     private javax.swing.JTable tablaDefectos;
     private javax.swing.JTable tblObjetivos;
     private javax.swing.JTable tblOrdenes;
-    private javax.swing.JTextField txtCorrectos;
-    private javax.swing.JTextField txtDefectuosos;
     // End of variables declaration//GEN-END:variables
 }

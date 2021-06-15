@@ -104,6 +104,7 @@ public class VentanaAgregarParesCorrectos extends javax.swing.JInternalFrame {
         int cantidad = Integer.parseInt(txtCodigo.getText());
         int paresActuales = Mdi.getArrayOrdenes().get(OP-1).getTurno().getParesSanos();
         Mdi.getArrayOrdenes().get(OP-1).getTurno().setParesSanos(paresActuales + cantidad);
+//        System.out.println("nuevos pares" + Integer.toString(Mdi.getArrayOrdenes().get(OP-1).getTurno().getParesSanos()));
         dispose();
         VentanaCalidad v = new VentanaCalidad(OP);
     }//GEN-LAST:event_btnCrearActionPerformed

@@ -190,6 +190,7 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
                 btnNuevoObjetivo.setEnabled(true);
                 btnEditarObjetivo.setEnabled(false);
                 btnQuitarObjetivo.setEnabled(false);
+                break;
             }
             case "PAUSADO" : {
                 btnPausar.setEnabled(false);
@@ -198,6 +199,7 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
                 btnNuevoObjetivo.setEnabled(false);
                 btnEditarObjetivo.setEnabled(false);
                 btnQuitarObjetivo.setEnabled(false);
+                break;
             }
             case "FINALIZADO" : {
                 btnPausar.setEnabled(false);
@@ -206,6 +208,7 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
                 btnNuevoObjetivo.setEnabled(false);
                 btnEditarObjetivo.setEnabled(false);
                 btnQuitarObjetivo.setEnabled(false);
+                break;
             }
         }
     }

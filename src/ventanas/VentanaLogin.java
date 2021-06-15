@@ -155,8 +155,6 @@ public class VentanaLogin extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(null, "Las credenciales no son correctas.");
             }
         }
-
-
     }//GEN-LAST:event_btnIngresarActionPerformed
 
     public String getDni() {

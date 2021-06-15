@@ -246,6 +246,7 @@ public class VentanaGestionarOP extends javax.swing.JInternalFrame {
 
         setTitle("GESTIONAR ORDEN DE PRODUCCIÓN");
         setFrameIcon(null);
+        setNormalBounds(new java.awt.Rectangle(0, 0, 0, 0));
 
         btnNuevo.setText("NUEVA OP");
         btnNuevo.addActionListener(new java.awt.event.ActionListener() {

@@ -5,6 +5,8 @@
  */
 package com.leguizamon.dissist;
 
+import java.util.HashMap;
+
 /**
  *
  * @author Luis
@@ -14,6 +16,24 @@ public class Turno {
     private String nombre;
     private int inicio;
     private int fin;
+    private int paresSanos;
+    private HashMap<String,Integer> paresDefectuoso;
+
+    public int getParesSanos() {
+        return paresSanos;
+    }
+
+    public void setParesSanos(int paresSanos) {
+        this.paresSanos = paresSanos;
+    }
+
+    public HashMap<String, Integer> getParesDefectuoso() {
+        return paresDefectuoso;
+    }
+
+    public void setParesDefectuoso(HashMap<String, Integer> paresDefectuoso) {
+        this.paresDefectuoso = paresDefectuoso;
+    }
 
     public Turno() {
     }
@@ -23,6 +43,8 @@ public class Turno {
         this.nombre = nombre;
         this.inicio = inicio;
         this.fin = fin;
+        this.paresSanos = 0;
+        this.paresDefectuoso = new HashMap<String, Integer>();
     }
 
     public int getId() {
